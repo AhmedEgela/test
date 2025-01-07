@@ -236,7 +236,7 @@ def estimators_performance_plot(accuracy_scores, precision_macro_scores, f1_macr
     plt.savefig("estimators_performance.png")
 
 
-features_df = pd.read_csv("/content/full_extracted.csv")
+features_df = pd.read_csv("full_extracted.csv")
 processed_df = data_preprocessing(features_df)
 
 processed_df2 = removing_highly_corr_features(processed_df, show_highly_corr=True, show_curr_corr=True)
