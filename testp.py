@@ -236,17 +236,46 @@ def estimators_performance_plot(accuracy_scores, precision_macro_scores, f1_macr
     plt.savefig("estimators_performance.png")
 
 
-features_df = pd.read_csv("full_extracted.csv")
-processed_df = data_preprocessing(features_df)
 
-processed_df2 = removing_highly_corr_features(processed_df, show_highly_corr=True, show_curr_corr=True)
+def main():
+    st.title("Radiomics Features Analysis")
 
-accuracy_scores_val, precision_macro_scores_val, f1_macro_scores_val, accuracy_scores_test, precision_macro_scores_test, f1_macro_scores_test = estimators_training_evaluation(processed_df2)
+    uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
+    if uploaded_file:
+        st.write("### Data Preview")
+        features_df = pd.read_csv(uploaded_file)
+        st.dataframe(features_df.head())
 
+        # Data Preprocessing
+        processed_df = data_preprocessing(features_df)
+        st.write("### Processed Data Preview")
+        st.dataframe(processed_df.head())
 
+        # Feature Selection
+        if st.button("Remove Highly Correlated Features"):
+            processed_df = removing_highly_corr_features(processed_df, show_highly_corr=False, show_curr_corr=False)
+            st.write("### Data After Removing Correlated Features")
+            st.dataframe(processed_df.head())
 
+        # Training Models
+        if st.button("Train Models"):
+            accuracy_scores_val, precision_macro_scores_val, f1_macro_scores_val, accuracy_scores_test, precision_macro_scores_test, f1_macro_scores_test = estimators_training_evaluation(
+                processed_df)
 
+            st.write("### Validation Metrics")
+            st.write(f"Accuracy: {accuracy_scores_val}")
+            st.write(f"Precision: {precision_macro_scores_val}")
+            st.write(f"F1 Scores: {f1_macro_scores_val}")
 
+            st.write("### Test Metrics")
+            st.write(f"Accuracy: {accuracy_scores_test}")
+            st.write(f"Precision: {precision_macro_scores_test}")
+            st.write(f"F1 Scores: {f1_macro_scores_test}")
 
-estimators_performance_plot(accuracy_scores_val, precision_macro_scores_val, f1_macro_scores_val, save_fig=True)
-estimators_performance_plot(accuracy_scores_test, precision_macro_scores_test, f1_macro_scores_test, save_fig=True)
+            # Plot Metrics
+            estimators_performance_plot(accuracy_scores_test, precision_macro_scores_test, f1_macro_scores_test)
+            st.pyplot(plt)
+
+# Run the app
+if __name__ == "__main__":
+    main()
