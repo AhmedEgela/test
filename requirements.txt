@@ -1,4 +1,3 @@
-os
 pandas==2.2.2
 numpy==1.26.4
 SimpleITK==2.4.0
