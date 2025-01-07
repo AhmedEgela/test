@@ -5,6 +5,7 @@ import numpy as np
 import SimpleITK as sitk
 import seaborn as sns
 import matplotlib.pyplot as plt
+import streamlit as st
 
 from sklearn.model_selection import cross_val_score, train_test_split, GridSearchCV
 from sklearn.preprocessing import StandardScaler, LabelEncoder
